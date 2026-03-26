@@ -583,64 +583,23 @@ a {
     align-items: center;
 }
 
-.neural {
-    width: 350px;
-    height: 350px;
-    position: relative;
-}
-
-.neural__node {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    background: var(--color-surface-1);
-    border: 2px solid var(--color-accent);
-    border-radius: 50%;
-    animation: glow 3s infinite alternate ease-in-out;
-}
-
-.neural__node::after {
-    content: '';
-    position: absolute;
-    inset: 4px;
-    background: var(--color-accent-glow);
-    border-radius: 50%;
-}
-
-.neural__node--1 { top: 0; left: 50%; transform: translateX(-50%); }
-.neural__node--2 { top: 50%; right: 0; transform: translateY(-50%); }
-.neural__node--3 { bottom: 0; left: 50%; transform: translateX(-50%); }
-.neural__node--center {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 70px;
-    height: 70px;
-    background: linear-gradient(135deg, var(--color-accent), var(--color-accent-secondary));
-    border: none;
-}
-
-.neural__node--center::after {
-    inset: 8px;
-    background: var(--color-bg-primary);
-}
-
-@keyframes glow {
-    from { box-shadow: 0 0 20px var(--color-accent-glow); }
-    to { box-shadow: 0 0 40px var(--color-accent-glow); }
-}
-
-.neural__lines {
-    position: absolute;
-    inset: 0;
+.hero__illustration {
     width: 100%;
-    height: 100%;
+    max-width: 500px;
+    height: auto;
+    filter: drop-shadow(0 0 40px var(--color-accent-glow));
 }
 
-.neural__line {
-    stroke: var(--color-accent);
-    stroke-width: 1;
-    opacity: 0.4;
+@media (max-width: 1024px) {
+    .hero__illustration {
+        max-width: 350px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero__illustration {
+        max-width: 280px;
+    }
 }
 
 /* =========================================================
@@ -726,15 +685,16 @@ section {
     width: 56px;
     height: 56px;
     margin-bottom: var(--space-5);
-    padding: var(--space-3);
+    padding: var(--space-2);
     background: var(--color-accent-glow);
     border-radius: var(--radius-md);
 }
 
-.service-card__icon svg {
+.service-card__icon img {
     width: 100%;
     height: 100%;
-    stroke: var(--color-accent);
+    object-fit: contain;
+    filter: drop-shadow(0 0 8px var(--color-accent-glow));
 }
 
 .service-card__title {

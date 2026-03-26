@@ -1,0 +1,48 @@
+<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad-analytics" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6" />
+      <stop offset="100%" style="stop-color:#7c3aed" />
+    </linearGradient>
+  </defs>
+  <g fill="none" stroke="url(#grad-analytics)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Chart base -->
+    <rect x="15" y="85" width="90" height="2" fill="url(#grad-analytics)" opacity="0.3"/>
+    <rect x="15" y="15" width="2" height="72" fill="url(#grad-analytics)" opacity="0.3"/>
+    
+    <!-- Bar chart -->
+    <rect x="25" y="55" width="15" height="30" fill="url(#grad-analytics)" opacity="0.6">
+      <animate attributeName="height" values="30;35;30" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="y" values="55;50;55" dur="2s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="50" y="40" width="15" height="45" fill="url(#grad-analytics)" opacity="0.7">
+      <animate attributeName="height" values="45;50;45" dur="2.5s" repeatCount="indefinite"/>
+      <animate attributeName="y" values="40;35;40" dur="2.5s" repeatCount="indefinite"/>
+    </rect>
+    <rect x="75" y="25" width="15" height="60" fill="url(#grad-analytics)" opacity="0.8">
+      <animate attributeName="height" values="60;65;60" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="y" values="25;20;25" dur="3s" repeatCount="indefinite"/>
+    </rect>
+    
+    <!-- Trend line -->
+    <path d="M32 55 L57 40 L82 25" stroke="url(#grad-analytics)" stroke-width="2" fill="none"/>
+    
+    <!-- Trend line nodes -->
+    <circle cx="32" cy="55" r="4" fill="url(#grad-analytics)"/>
+    <circle cx="57" cy="40" r="4" fill="url(#grad-analytics)"/>
+    <circle cx="82" cy="25" r="4" fill="url(#grad-analytics)">
+      <animate attributeName="r" values="4;6;4" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Prediction arrow -->
+    <path d="M82 25 L92 15" stroke="url(#grad-analytics)" stroke-width="2" marker-end="url(#arrowhead)"/>
+    <polygon points="95,12 88,18 92,22" fill="url(#grad-analytics)">
+      <animate attributeName="opacity" values="1;0.6;1" dur="1s" repeatCount="indefinite"/>
+    </polygon>
+    
+    <!-- Y-axis labels -->
+    <text x="10" y="30" font-size="8" fill="url(#grad-analytics)" opacity="0.6">100%</text>
+    <text x="10" y="60" font-size="8" fill="url(#grad-analytics)" opacity="0.6">50%</text>
+    <text x="10" y="87" font-size="8" fill="url(#grad-analytics)" opacity="0.6">0%</text>
+  </g>
+</svg>

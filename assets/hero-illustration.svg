@@ -1,0 +1,97 @@
+<svg viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d4aa;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#3b82f6;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:0.8" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00d4aa;stop-opacity:0" />
+      <stop offset="50%" style="stop-color:#00d4aa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#00d4aa;stop-opacity:0" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <style>
+      .node { animation: pulse 3s ease-in-out infinite; }
+      .node:nth-child(odd) { animation-delay: 0.5s; }
+      .connection { animation: flow 2s ease-in-out infinite; }
+      @keyframes pulse {
+        0%, 100% { opacity: 0.6; transform: scale(1); }
+        50% { opacity: 1; transform: scale(1.1); }
+      }
+      @keyframes flow {
+        0%, 100% { opacity: 0.2; }
+        50% { opacity: 0.6; }
+      }
+    </style>
+  </defs>
+  
+  <!-- Background grid -->
+  <g opacity="0.1">
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#00d4aa" stroke-width="0.5"/>
+    </pattern>
+    <rect width="100%" height="100%" fill="url(#grid)"/>
+  </g>
+  
+  <!-- Central AI Brain -->
+  <g transform="translate(400, 300)">
+    <!-- Outer ring -->
+    <circle r="180" fill="none" stroke="url(#grad1)" stroke-width="2" opacity="0.3">
+      <animate attributeName="r" values="180;190;180" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="160" fill="none" stroke="url(#grad1)" stroke-width="1" opacity="0.2">
+      <animate attributeName="r" values="160;170;160" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Inner nodes -->
+    <circle cx="0" cy="0" r="40" fill="url(#grad1)" filter="url(#glow)" class="node"/>
+    <circle cx="-80" cy="-80" r="20" fill="#00d4aa" opacity="0.8" class="node"/>
+    <circle cx="80" cy="-80" r="20" fill="#3b82f6" opacity="0.8" class="node"/>
+    <circle cx="-80" cy="80" r="20" fill="#7c3aed" opacity="0.8" class="node"/>
+    <circle cx="80" cy="80" r="20" fill="#00d4aa" opacity="0.8" class="node"/>
+    <circle cx="0" cy="-120" r="15" fill="#00d4aa" opacity="0.6" class="node"/>
+    <circle cx="0" cy="120" r="15" fill="#3b82f6" opacity="0.6" class="node"/>
+    <circle cx="-120" cy="0" r="15" fill="#7c3aed" opacity="0.6" class="node"/>
+    <circle cx="120" cy="0" r="15" fill="#00d4aa" opacity="0.6" class="node"/>
+    
+    <!-- Connections -->
+    <line x1="0" y1="0" x2="-80" y2="-80" stroke="url(#grad2)" stroke-width="1.5" class="connection"/>
+    <line x1="0" y1="0" x2="80" y2="-80" stroke="url(#grad2)" stroke-width="1.5" class="connection"/>
+    <line x1="0" y1="0" x2="-80" y2="80" stroke="url(#grad2)" stroke-width="1.5" class="connection"/>
+    <line x1="0" y1="0" x2="80" y2="80" stroke="url(#grad2)" stroke-width="1.5" class="connection"/>
+    <line x1="-80" y1="-80" x2="0" y2="-120" stroke="url(#grad2)" stroke-width="1" class="connection"/>
+    <line x1="80" y1="-80" x2="0" y2="-120" stroke="url(#grad2)" stroke-width="1" class="connection"/>
+    <line x1="-80" y1="80" x2="0" y2="120" stroke="url(#grad2)" stroke-width="1" class="connection"/>
+    <line x1="80" y1="80" x2="0" y2="120" stroke="url(#grad2)" stroke-width="1" class="connection"/>
+    <line x1="-120" y1="0" x2="-80" y2="-80" stroke="url(#grad2)" stroke-width="1" class="connection"/>
+    <line x1="-120" y1="0" x2="-80" y2="80" stroke="url(#grad2)" stroke-width="1" class="connection"/>
+    <line x1="120" y1="0" x2="80" y2="-80" stroke="url(#grad2)" stroke-width="1" class="connection"/>
+    <line x1="120" y1="0" x2="80" y2="80" stroke="url(#grad2)" stroke-width="1" class="connection"/>
+    
+    <!-- AI Symbol in center -->
+    <text x="0" y="8" text-anchor="middle" font-family="Space Grotesk, sans-serif" font-size="28" font-weight="700" fill="#08080c">AI</text>
+  </g>
+  
+  <!-- Floating particles -->
+  <g opacity="0.5">
+    <circle cx="100" cy="100" r="3" fill="#00d4aa">
+      <animate attributeName="cy" values="100;120;100" dur="5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="700" cy="150" r="4" fill="#3b82f6">
+      <animate attributeName="cy" values="150;130;150" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="200" cy="500" r="3" fill="#7c3aed">
+      <animate attributeName="cy" values="500;480;500" dur="6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="650" cy="450" r="3" fill="#00d4aa">
+      <animate attributeName="cy" values="450;470;450" dur="4.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+</svg>
