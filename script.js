@@ -1,87 +1,175 @@
-// ========================================
-// Wise Generative - JavaScript
-// ========================================
+/**
+ * Wise Generative v3 - JavaScript
+ * Following Research-Backed Design Framework
+ * 
+ * Skills Applied:
+ * 7. Micro-Interactions (functional, <300ms)
+ * 8. Performance (Core Web Vitals optimized)
+ * 9. Accessibility (WCAG 2.2 AA, keyboard nav)
+ */
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Mobile Menu Toggle
-    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-    const navLinks = document.querySelector('.nav-links');
+(function() {
+    'use strict';
     
-    if (mobileMenuBtn && navLinks) {
-        mobileMenuBtn.addEventListener('click', () => {
-            mobileMenuBtn.classList.toggle('active');
-            navLinks.classList.toggle('active');
+    // =========================================
+    // MOBILE MENU (Accessible)
+    // =========================================
+    
+    const navToggle = document.querySelector('.nav__toggle');
+    const navLinks = document.querySelector('.nav__links');
+    
+    if (navToggle && navLinks) {
+        navToggle.addEventListener('click', () => {
+            const isOpen = navToggle.getAttribute('aria-expanded') === 'true';
+            navToggle.setAttribute('aria-expanded', !isOpen);
+            navLinks.setAttribute('data-open', !isOpen);
         });
         
-        // Close menu when clicking a link
+        // Close menu on link click
         navLinks.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
-                mobileMenuBtn.classList.remove('active');
-                navLinks.classList.remove('active');
+                navToggle.setAttribute('aria-expanded', 'false');
+                navLinks.setAttribute('data-open', 'false');
             });
+        });
+        
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navLinks.getAttribute('data-open') === 'true') {
+                navToggle.setAttribute('aria-expanded', 'false');
+                navLinks.setAttribute('data-open', 'false');
+                navToggle.focus();
+            }
         });
     }
     
-    // Scroll animations
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
+    // =========================================
+    // SMOOTH SCROLL (with nav offset)
+    // =========================================
     
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate-on-scroll');
-                entry.target.style.animationDelay = entry.target.dataset.delay || '0s';
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href === '#') return;
+            
+            e.preventDefault();
+            const target = document.querySelector(href);
+            
+            if (target) {
+                const navHeight = document.querySelector('.header')?.offsetHeight || 80;
+                const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
+                
+                window.scrollTo({
+                    top: targetPosition,
+                    behavior: 'smooth'
+                });
+                
+                // Update focus for accessibility
+                target.setAttribute('tabindex', '-1');
+                target.focus({ preventScroll: true });
             }
         });
-    }, observerOptions);
-    
-    // Observe elements
-    const animateElements = document.querySelectorAll('.service-card, .step, .stat-item, .about-content, .cta-content');
-    animateElements.forEach((el, index) => {
-        el.dataset.delay = `${index * 0.1}s`;
-        observer.observe(el);
     });
     
-    // Counter animation for stats
+    // =========================================
+    // HEADER SCROLL BEHAVIOR
+    // =========================================
+    
+    const header = document.querySelector('.header');
+    let lastScrollY = 0;
+    let ticking = false;
+    
+    function updateHeader() {
+        const scrollY = window.pageYOffset;
+        
+        if (scrollY > 100) {
+            header.style.background = 'rgba(8, 8, 12, 0.95)';
+        } else {
+            header.style.background = 'rgba(8, 8, 12, 0.85)';
+        }
+        
+        lastScrollY = scrollY;
+        ticking = false;
+    }
+    
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            requestAnimationFrame(updateHeader);
+            ticking = true;
+        }
+    }, { passive: true });
+    
+    // =========================================
+    // INTERSECTION OBSERVER (Animations)
+    // =========================================
+    
+    const animateOnScroll = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                // Staggered animation
+                setTimeout(() => {
+                    entry.target.classList.add('visible');
+                }, index * 100);
+                
+                // Unobserve after animation
+                animateOnScroll.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+    
+    // Elements to animate
+    const animateElements = document.querySelectorAll(
+        '.service-card, .step, .stat__value, .about__grid, .cta__content'
+    );
+    
+    animateElements.forEach(el => el.classList.add('animate-in'));
+    animateElements.forEach(el => animateOnScroll.observe(el));
+    
+    // =========================================
+    // STATS COUNTER (Skill 7: Functional Animation)
+    // =========================================
+    
     const statsSection = document.querySelector('.stats');
-    const statNumbers = document.querySelectorAll('.stat-number');
+    const counters = document.querySelectorAll('.stat__number');
     let statsAnimated = false;
     
-    const animateStats = () => {
+    function animateCounters() {
         if (statsAnimated) return;
         statsAnimated = true;
         
-        statNumbers.forEach(stat => {
-            const target = parseInt(stat.dataset.target);
-            const duration = 2000;
-            const start = performance.now();
+        counters.forEach(counter => {
+            const target = parseInt(counter.getAttribute('data-target'), 10);
+            const duration = 2000; // 2 seconds
+            const startTime = performance.now();
             
-            const updateNumber = (currentTime) => {
-                const elapsed = currentTime - start;
+            function updateCounter(currentTime) {
+                const elapsed = currentTime - startTime;
                 const progress = Math.min(elapsed / duration, 1);
                 
-                // Easing function
+                // Ease out cubic
                 const easeOut = 1 - Math.pow(1 - progress, 3);
                 const current = Math.floor(target * easeOut);
                 
-                stat.textContent = current;
+                counter.textContent = current;
                 
                 if (progress < 1) {
-                    requestAnimationFrame(updateNumber);
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    counter.textContent = target;
                 }
-            };
+            }
             
-            requestAnimationFrame(updateNumber);
+            requestAnimationFrame(updateCounter);
         });
-    };
+    }
     
-    // Trigger counter when stats section is visible
     const statsObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                animateStats();
+                animateCounters();
                 statsObserver.unobserve(entry.target);
             }
         });
@@ -91,101 +179,86 @@ document.addEventListener('DOMContentLoaded', () => {
         statsObserver.observe(statsSection);
     }
     
-    // Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            const href = this.getAttribute('href');
-            if (href === '#') return;
+    // =========================================
+    // NEURAL NETWORK PARALLAX (Reduced Motion)
+    // =========================================
+    
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const neuralElement = document.querySelector('.neural');
+    
+    if (neuralElement && !prefersReducedMotion.matches) {
+        document.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth / 2 - e.clientX) / 40;
+            const y = (window.innerHeight / 2 - e.clientY) / 40;
             
-            e.preventDefault();
-            const target = document.querySelector(href);
-            
-            if (target) {
-                const navHeight = document.querySelector('.nav')?.offsetHeight || 80;
-                const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - navHeight;
-                
-                window.scrollTo({
-                    top: targetPosition,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-    
-    // Nav background on scroll
-    const nav = document.querySelector('.nav');
-    let lastScroll = 0;
-    
-    window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
-        
-        if (currentScroll > 100) {
-            nav.style.background = 'rgba(10, 10, 15, 0.95)';
-        } else {
-            nav.style.background = 'rgba(10, 10, 15, 0.8)';
-        }
-        
-        lastScroll = currentScroll;
-    });
-    
-    // Parallax effect for neural network
-    const neuralNetwork = document.querySelector('.neural-network');
-    
-    if (neuralNetwork) {
-        window.addEventListener('mousemove', (e) => {
-            const x = (window.innerWidth / 2 - e.clientX) / 50;
-            const y = (window.innerHeight / 2 - e.clientY) / 50;
-            
-            neuralNetwork.style.transform = `translate(${x}px, ${y}px)`;
+            neuralElement.style.transform = `translate(${x}px, ${y}px)`;
         });
     }
     
-    // WhatsApp link tracking (optional - for analytics)
+    // =========================================
+    // FOCUS MANAGEMENT (Accessibility)
+    // =========================================
+    
+    // Add visible focus indicator for keyboard users
+    document.body.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab') {
+            document.body.classList.add('keyboard-nav');
+        }
+    });
+    
+    document.body.addEventListener('mousedown', () => {
+        document.body.classList.remove('keyboard-nav');
+    });
+    
+    // =========================================
+    // PERFORMANCE: Lazy load images (if any)
+    // =========================================
+    
+    if ('IntersectionObserver' in window) {
+        const lazyImages = document.querySelectorAll('img[data-src]');
+        
+        const imageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src;
+                    img.removeAttribute('data-src');
+                    imageObserver.unobserve(img);
+                }
+            });
+        }, { rootMargin: '50px' });
+        
+        lazyImages.forEach(img => imageObserver.observe(img));
+    }
+    
+    // =========================================
+    // ANALYTICS HOOKS (Optional)
+    // =========================================
+    
     const whatsappLinks = document.querySelectorAll('a[href*="wa.me"]');
     
     whatsappLinks.forEach(link => {
         link.addEventListener('click', () => {
-            // You can add analytics tracking here
-            console.log('WhatsApp CTA clicked');
+            // Track WhatsApp CTA clicks
+            if (typeof gtag === 'function') {
+                gtag('event', 'click', {
+                    'event_category': 'CTA',
+                    'event_label': 'WhatsApp'
+                });
+            }
+            
+            // Console log for debugging
+            console.log('📊 WhatsApp CTA clicked:', link.href);
         });
     });
     
-    // Add loading animation to service cards
-    const serviceCards = document.querySelectorAll('.service-card');
+    // =========================================
+    // CONSOLE EASTER EGG
+    // =========================================
     
-    serviceCards.forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(30px)';
-        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        card.style.transitionDelay = `${index * 0.1}s`;
-        
-        setTimeout(() => {
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        }, 100);
-    });
-    
-    // Typing effect for hero title (optional)
-    // Uncomment if you want a typing effect
-    /*
-    const heroTitle = document.querySelector('.hero-title');
-    const text = heroTitle.innerHTML;
-    heroTitle.innerHTML = '';
-    
-    let i = 0;
-    const typeWriter = () => {
-        if (i < text.length) {
-            heroTitle.innerHTML += text.charAt(i);
-            i++;
-            setTimeout(typeWriter, 50);
-        }
-    };
-    
-    typeWriter();
-    */
-    
-    // Console easter egg
-    console.log('%c✨ Wise Generative', 'font-size: 24px; font-weight: bold; color: #00ffd1;');
+    console.log('%c✨ Wise Generative', 'font-size: 24px; font-weight: bold; color: #00d4aa;');
     console.log('%cSolutions IA Innovantes', 'font-size: 14px; color: #a0a0b0;');
-    console.log('%c→ Contact: wa.me/33754039519', 'font-size: 12px; color: #25d366;');
-});
+    console.log('%c📱 Contact: wa.me/33754039519', 'font-size: 12px; color: #25d366;');
+    console.log('%c🎨 Built with research-backed design principles', 'font-size: 11px; color: #7c3aed;');
+    
+})();
