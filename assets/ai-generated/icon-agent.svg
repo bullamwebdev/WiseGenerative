@@ -1,0 +1,136 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="agentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00d4aa"/>
+      <stop offset="50%" style="stop-color:#3b82f6"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="screenGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a2e"/>
+      <stop offset="100%" style="stop-color:#0a0a0f"/>
+    </linearGradient>
+    
+    <filter id="agentGlow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <style>
+      .robot-body { animation: hover 3s ease-in-out infinite; }
+      .robot-eyes { animation: blink 4s ease-in-out infinite; }
+      .antenna { animation: pulse-antenna 2s ease-in-out infinite; }
+      .signal { animation: signal-wave 1.5s ease-out infinite; }
+      .particle { animation: float-particle 5s ease-in-out infinite; }
+      
+      @keyframes hover {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-5px); }
+      }
+      @keyframes blink {
+        0%, 45%, 55%, 100% { transform: scaleY(1); }
+        50% { transform: scaleY(0.1); }
+      }
+      @keyframes pulse-antenna {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
+      }
+      @keyframes signal-wave {
+        0% { transform: scale(1); opacity: 0.6; }
+        100% { transform: scale(2); opacity: 0; }
+      }
+      @keyframes float-particle {
+        0%, 100% { opacity: 0.3; transform: translate(0, 0); }
+        50% { opacity: 0.7; transform: translate(5px, -5px); }
+      }
+    </style>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="200" height="200" fill="#0a0a0f"/>
+  
+  <!-- Robot body -->
+  <g class="robot-body">
+    <!-- Main body -->
+    <rect x="40" y="60" width="120" height="90" rx="15" fill="#16161f" stroke="url(#agentGrad)" stroke-width="2" filter="url(#agentGlow)"/>
+    
+    <!-- Screen -->
+    <rect x="50" y="70" width="100" height="55" rx="8" fill="url(#screenGrad)"/>
+    
+    <!-- Screen inner glow -->
+    <rect x="55" y="75" width="90" height="45" rx="5" fill="none" stroke="#00d4aa" stroke-width="1" opacity="0.3"/>
+    
+    <!-- AI Face/Eyes -->
+    <g class="robot-eyes">
+      <!-- Left eye -->
+      <circle cx="80" cy="97" r="12" fill="url(#agentGrad)">
+        <animate attributeName="r" values="12;14;12" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="80" cy="97" r="8" fill="#00d4aa">
+        <animate attributeName="r" values="8;9;8" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="80" cy="97" r="4" fill="#fff">
+        <animate attributeName="opacity" values="1;0.8;1" dur="1s" repeatCount="indefinite"/>
+      </circle>
+      
+      <!-- Right eye -->
+      <circle cx="120" cy="97" r="12" fill="url(#agentGrad)">
+        <animate attributeName="r" values="12;14;12" dur="2s" repeatCount="indefinite" begin="0.1s"/>
+      </circle>
+      <circle cx="120" cy="97" r="8" fill="#00d4aa">
+        <animate attributeName="r" values="8;9;8" dur="2s" repeatCount="indefinite" begin="0.1s"/>
+      </circle>
+      <circle cx="120" cy="97" r="4" fill="#fff">
+        <animate attributeName="opacity" values="1;0.8;1" dur="1s" repeatCount="indefinite" begin="0.1s"/>
+      </circle>
+    </g>
+    
+    <!-- Smile/mouth indicator -->
+    <path d="M 85 115 Q 100 125 115 115" stroke="#00d4aa" stroke-width="2" fill="none" opacity="0.8">
+      <animate attributeName="opacity" values="0.8;1;0.8" dur="3s" repeatCount="indefinite"/>
+    </path>
+    
+    <!-- Base/stand -->
+    <rect x="75" y="150" width="50" height="12" rx="3" fill="url(#agentGrad)" opacity="0.6"/>
+    <rect x="65" y="158" width="70" height="8" rx="2" fill="url(#agentGrad)" opacity="0.4"/>
+  </g>
+  
+  <!-- Antenna -->
+  <g class="antenna">
+    <line x1="100" y1="30" x2="100" y2="60" stroke="url(#agentGrad)" stroke-width="3"/>
+    <circle cx="100" cy="28" r="8" fill="url(#agentGrad)" filter="url(#agentGlow)">
+      <animate attributeName="r" values="8;10;8" dur="1.5s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Signal waves -->
+    <g opacity="0.6">
+      <circle cx="100" cy="28" r="15" fill="none" stroke="#00d4aa" stroke-width="1" class="signal"/>
+      <circle cx="100" cy="28" r="25" fill="none" stroke="#00d4aa" stroke-width="1" class="signal" style="animation-delay: 0.5s;"/>
+      <circle cx="100" cy="28" r="35" fill="none" stroke="#00d4aa" stroke-width="1" class="signal" style="animation-delay: 1s;"/>
+    </g>
+  </g>
+  
+  <!-- Decorative elements -->
+  <g class="particle" style="animation-delay: 0s;">
+    <circle cx="30" cy="80" r="3" fill="#00d4aa" opacity="0.4"/>
+  </g>
+  <g class="particle" style="animation-delay: 1s;">
+    <circle cx="170" cy="70" r="3" fill="#3b82f6" opacity="0.4"/>
+  </g>
+  <g class="particle" style="animation-delay: 2s;">
+    <circle cx="25" cy="140" r="2" fill="#7c3aed" opacity="0.4"/>
+  </g>
+  <g class="particle" style="animation-delay: 3s;">
+    <circle cx="175" cy="150" r="2" fill="#00d4aa" opacity="0.4"/>
+  </g>
+  
+  <!-- Body side decorations -->
+  <rect x="45" y="80" width="3" height="30" rx="1" fill="#00d4aa" opacity="0.5">
+    <animate attributeName="height" values="30;35;30" dur="2s" repeatCount="indefinite"/>
+  </rect>
+  <rect x="152" y="80" width="3" height="30" rx="1" fill="#00d4aa" opacity="0.5">
+    <animate attributeName="height" values="30;35;30" dur="2s" repeatCount="indefinite" begin="0.3s"/>
+  </rect>
+</svg>
