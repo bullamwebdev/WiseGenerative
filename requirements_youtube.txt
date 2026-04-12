@@ -1,3 +1,5 @@
 # YouTube Ingestion Pipeline — Python dependencies
-yt-dlp>=2024.1.0
-youtube-transcript>=0.3.0
+# All are optional: pipeline degrades gracefully when tools are absent.
+yt-dlp>=2024.1.0          # metadata (primary); falls back to Invidious API
+youtube-transcript-api>=1.0.0  # transcripts (primary); falls back to Invidious captions
+requests>=2.31.0           # required for Invidious API fallback (Fix 2)
